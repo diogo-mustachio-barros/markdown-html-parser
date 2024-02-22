@@ -19,6 +19,8 @@ public class Parser {
 			{ 
 				// collect line
 				String line = sb.toString();
+				// clear StringBuilder
+				sb.setLength(0);
 				
 				// parse
 				if (isHeading(line))
