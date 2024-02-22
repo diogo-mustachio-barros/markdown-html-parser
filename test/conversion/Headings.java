@@ -24,13 +24,17 @@ public class Headings {
 				<h1>This is a heading</h1>
 				""";
 		
-		Reader in = new StringReader(markdown);
+		String actual = parse(markdown);
+		
+		assertEquals(html, actual);
+	}
+	
+	private static String parse(String input) throws IOException {
+		Reader in = new StringReader(input);
 		Writer out = new StringWriter();
 		
 		Parser.toHtml(in, out);
 		
-		String actual = out.toString();
-		
-		assertEquals(html, actual);
+		return out.toString();
 	}
 }
