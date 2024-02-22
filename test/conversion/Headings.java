@@ -73,6 +73,7 @@ public class Headings {
 		assertEquals(html, actual);
 	}
 	
+	@Test
 	public void mixedDifferentHeadings() throws IOException {
 		String markdown = """
 				## H2
@@ -97,6 +98,7 @@ public class Headings {
 		assertEquals(html, actual);
 	}
 	
+	@Test
 	public void spacedHeadings() throws IOException {
 		String markdown = """
 				# Heading 1
