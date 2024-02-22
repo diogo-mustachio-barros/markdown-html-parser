@@ -1,73 +1,50 @@
 package parser;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+
+import util.StringUtil;
 
 public class Parser {
 
-	public static void main(String[] args) {
+	public static void toHtml(Reader in, Writer out) throws IOException {
 		
-		String filepathIn  = "input/example1.md";
-		String filepathOut = "output";
+		StringBuilder sb = new StringBuilder();
+		int ascii;
 		
-		
-		// Try and open a reader
-		File fileIn = new File(filepathIn);
-		Reader r = null;
-		try {
-			r = new BufferedReader(new InputStreamReader(new FileInputStream(fileIn), "ASCII"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (r == null)
-			return;
-		
-		// Try and open a writer
-		File fileOut = new File(filepathOut);
-		Writer w = null;
-		try {
-			w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileIn), "ASCII"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (w == null)
-			return;
-		
-		// Generate html
-		try {
-			toHtml(r, w);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while ((ascii = in.read()) >= 0) 
+		{
+			if (ascii == '\n') 
+			{ 
+				// collect line
+				String line = sb.toString();
+				// clear StringBuilder
+				sb.setLength(0);
+				
+				// parse
+				if (isHeading(line))
+					parseHeading(in, out, line);
+			}
+			else
+			{
+				// read an entire line before trying to parse
+				sb.append((char) ascii);
+			}
 		}
 	}
 	
-	private static void toHtml(Reader in, Writer out) throws IOException {
-		int ascii;
-		
-		while ((ascii = in.read()) >= 0) {
-			// TODO
-		}
+	private static boolean isHeading(String line) {
+		return line.startsWith("#") 
+			&& StringUtil.countHeadingChars(line, '#') <= 6;
 	}
+	
+	private static void parseHeading(Reader in, Writer out, String firstLine) throws IOException {
+		int headingCount = StringUtil.countHeadingChars(firstLine, '#');
+		
+		out.write("<h" + headingCount + ">" + firstLine.substring(headingCount).trim() + "</h" + headingCount + ">\n");
+	}
+	
+	
 	
 }
