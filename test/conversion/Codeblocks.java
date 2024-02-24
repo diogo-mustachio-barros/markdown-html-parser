@@ -17,7 +17,78 @@ public class Codeblocks {
 				""";
 		
 		String html = """
-				<pre><code>this is a code block</code></pre>
+				<pre><code>
+				this is a code block
+				</code></pre>
+				""";
+		
+		String actual = ConversionTestUtil.parse(markdown);
+		
+		assertEquals(html, actual);
+	}
+	
+	@Test
+	public void doubleCodeblock() throws IOException {
+		String markdown = """
+				```
+				this is a code block
+				```
+				```
+				this is another code block
+				```
+				""";
+		
+		String html = """
+				<pre><code>
+				this is a code block
+				</code></pre>
+				<pre><code>
+				this is another code block
+				</code></pre>
+				""";
+		
+		String actual = ConversionTestUtil.parse(markdown);
+		
+		assertEquals(html, actual);
+	}
+	
+	@Test
+	public void largeCodeblock() throws IOException {
+		String markdown = """
+				```
+				this is 
+				a 
+				biiig
+				code block
+				```
+				""";
+		
+		String html = """
+				<pre><code>
+				this is 
+				a 
+				biiig
+				code block
+				</code></pre>
+				""";
+		
+		String actual = ConversionTestUtil.parse(markdown);
+		
+		assertEquals(html, actual);
+	}
+	
+	@Test
+	public void languageCodeblock() throws IOException {
+		String markdown = """
+				```js
+				this is a js code block
+				```
+				""";
+		
+		String html = """
+				<pre><code class="lang-js">
+				this is a js code block
+				</code></pre>
 				""";
 		
 		String actual = ConversionTestUtil.parse(markdown);
