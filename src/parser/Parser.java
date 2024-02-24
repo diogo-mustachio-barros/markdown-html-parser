@@ -8,6 +8,8 @@ import util.StringUtil;
 
 public class Parser {
 
+	private static final String CODE_BLOCK_DELIMITER = "```";
+	
 	public static void toHtml(Reader in, Writer out) throws IOException {
 		
 		StringBuilder sb = new StringBuilder();
@@ -25,6 +27,8 @@ public class Parser {
 				// parse
 				if (isHeading(line))
 					parseHeading(in, out, line);
+				else if (isCodeBlock(line))
+					parseCodeBlock(in, out, line);
 			}
 			else
 			{
@@ -46,5 +50,25 @@ public class Parser {
 	}
 	
 	
+	
+	private static boolean isCodeBlock(String line) {
+		return line.startsWith(CODE_BLOCK_DELIMITER);
+	}
+	
+	private static void parseCodeBlock(Reader in, Writer out, String firstLine) throws IOException {
+		// returns the language or empty string (because firstLine is always at least 3 in size)
+		String language = firstLine.substring(3);
+		
+		// collect all code until the delimiter
+		String code = "";
+		String line = "";
+		while ((line = StringUtil.readLine(in)) != null 
+				&& !line.equals(CODE_BLOCK_DELIMITER))
+			code += line + "\n";
+		
+		String preamble = language.isEmpty() ? "" : " class=\"lang-" + language + "\"";
+		
+		out.write("<pre><code" + preamble + ">\n"+ code + "</code></pre>\n");
+	}
 	
 }
