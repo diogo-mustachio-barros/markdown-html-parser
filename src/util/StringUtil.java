@@ -21,8 +21,14 @@ public class StringUtil {
 				else
 					sb.append((char) ascii);
 		} catch (IOException e) {
-			return sb.toString();
+			return null;
 		}
+		
+		String line = sb.toString();
+		
+		// reader reached end and nothing was read
+		if (line == "" && ascii == -1)
+			return null;
 		
 		return sb.toString();
 	}

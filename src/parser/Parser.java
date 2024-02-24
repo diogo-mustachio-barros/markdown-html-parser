@@ -52,7 +52,7 @@ public class Parser {
 	
 	
 	private static boolean isCodeBlock(String line) {
-		return line.equals(CODE_BLOCK_DELIMITER);
+		return line.startsWith(CODE_BLOCK_DELIMITER);
 	}
 	
 	private static void parseCodeBlock(Reader in, Writer out, String firstLine) throws IOException {
@@ -62,10 +62,13 @@ public class Parser {
 		// collect all code until the delimiter
 		String code = "";
 		String line = "";
-		while ((line = StringUtil.readLine(in)) != CODE_BLOCK_DELIMITER)
+		while ((line = StringUtil.readLine(in)) != null 
+				&& !line.equals(CODE_BLOCK_DELIMITER))
 			code += line + "\n";
 		
-		out.write("<pre><code class=\"" + language + "\"> "+ code + "</code></pre>\n");
+		String preamble = language.isEmpty() ? "" : " class=\"lang-" + language + "\"";
+		
+		out.write("<pre><code" + preamble + ">\n"+ code + "</code></pre>\n");
 	}
 	
 }
