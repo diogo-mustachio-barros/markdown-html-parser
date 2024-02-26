@@ -9,6 +9,7 @@ import util.StringUtil;
 public class Parser {
 
 	private static final String CODE_BLOCK_DELIMITER = "```";
+	private static final Character BLOCKQUOTE_CHARACTER = '>';
 	
 	public static void toHtml(Reader in, Writer out) throws IOException {
 		
@@ -29,6 +30,8 @@ public class Parser {
 					parseHeading(in, out, line);
 				else if (isCodeBlock(line))
 					parseCodeBlock(in, out, line);
+				else if (isBlockquote(line))
+					parseBlockquote(in, out, line);
 			}
 			else
 			{
@@ -37,7 +40,7 @@ public class Parser {
 			}
 		}
 	}
-	
+
 	private static boolean isHeading(String line) {
 		return line.startsWith("#") 
 			&& StringUtil.countHeadingChars(line, '#') <= 6;
@@ -69,6 +72,37 @@ public class Parser {
 		String preamble = language.isEmpty() ? "" : " class=\"lang-" + language + "\"";
 		
 		out.write("<pre><code" + preamble + ">\n"+ code + "</code></pre>\n");
+	}
+	
+	
+	
+	private static boolean isBlockquote(String line) {
+		return line.startsWith(BLOCKQUOTE_CHARACTER + "");
+	}
+	
+	private static void parseBlockquote(Reader in, Writer out, String firstLine) throws IOException {
+		
+		int prevLevel = 0;
+		int level;
+		String line = firstLine;
+		
+		while ((line = StringUtil.readLine(in)) != null 
+				&& !line.equals(CODE_BLOCK_DELIMITER))
+		{
+			level = StringUtil.countHeadingChars(firstLine, BLOCKQUOTE_CHARACTER);
+			
+			if (level > prevLevel) 
+				for (int i = 0; i + prevLevel < level; i++)
+					out.write("<blockquote>\n");
+			
+			out.write(firstLine.substring(level).trim() + "\n");
+			
+			if (level < prevLevel)
+				for (int i = 0; i + level < prevLevel; i++)
+					out.write("</blockquote>\n");
+			
+			prevLevel = level;
+		}
 	}
 	
 }
