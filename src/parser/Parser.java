@@ -86,26 +86,32 @@ public class Parser {
 	private static void parseBlockquote(Reader in, Writer out, String firstLine) throws IOException {
 		
 		int prevLevel = 0;
-		int level;
+		int level = 0;
 		String line = firstLine;
 		
-		while ((line = StringUtil.readLine(in)) != null 
-				&& line.startsWith(BLOCKQUOTE_CHARACTER + ""))
+		while (line != null 
+			&& line.startsWith(BLOCKQUOTE_CHARACTER + "")
+			&& !line.equals(""))
 		{
-			level = StringUtil.countHeadingChars(firstLine, BLOCKQUOTE_CHARACTER);
+			level = StringUtil.countHeadingChars(line, BLOCKQUOTE_CHARACTER);
 			
 			if (level > prevLevel) 
-				for (int i = 0; i + prevLevel < level; i++)
+				for (int i = prevLevel; i < level; i++)
 					out.write("<blockquote>\n");
+			else if (level < prevLevel)
+				for (int i = level; i < prevLevel; i++)
+					out.write("</blockquote>\n");
 			
 			out.write(line.substring(level).trim() + "\n");
 			
-			if (level < prevLevel)
-				for (int i = 0; i + level < prevLevel; i++)
-					out.write("</blockquote>\n");
 			
 			prevLevel = level;
+			line = StringUtil.readLine(in);
 		}
+		
+		// close any leftover blockquotes
+		for (int i = 0; i < Math.max(prevLevel, level); i++)
+			out.write("</blockquote>\n");
 	}
 	
 	
