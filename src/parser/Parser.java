@@ -65,16 +65,16 @@ public class Parser {
 		// returns the language or empty string (because firstLine is always at least 3 in size)
 		String language = firstLine.substring(3);
 		
+		String languagePreamble = language.isEmpty() ? "" : " class=\"lang-" + language + "\"";
+		out.write("<pre><code" + languagePreamble + ">\n");
+		
 		// collect all code until the delimiter
-		String code = "";
 		String line = "";
 		while ((line = StringUtil.readLine(in)) != null 
 				&& !line.equals(CODE_BLOCK_DELIMITER))
-			code += line + "\n";
+			out.write(line + "\n");
 		
-		String preamble = language.isEmpty() ? "" : " class=\"lang-" + language + "\"";
-		
-		out.write("<pre><code" + preamble + ">\n"+ code + "</code></pre>\n");
+		out.write("</code></pre>\n");
 	}
 	
 	
