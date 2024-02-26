@@ -11,9 +11,7 @@ public class Blockquotes {
 	@Test
 	public void simpleBlockquote() throws IOException {
 		String markdown = """
-				```
 				> this is a blockquote
-				```
 				""";
 		
 		String html = """
@@ -30,10 +28,8 @@ public class Blockquotes {
 	@Test
 	public void multilineBlockquote() throws IOException {
 		String markdown = """
-				```
 				> this is 
 				> a multiline blockquote
-				```
 				""";
 		
 		String html = """
@@ -51,13 +47,11 @@ public class Blockquotes {
 	@Test
 	public void multipleBlockquote() throws IOException {
 		String markdown = """
-				```
 				> this is a blockquote
 				
 				> this is another blockquote
 				
 				> and another blockquote!
-				```
 				""";
 		
 		String html = """
@@ -80,10 +74,8 @@ public class Blockquotes {
 	@Test
 	public void nestedBlockquote() throws IOException {
 		String markdown = """
-				```
 				> outside
 				>> nested
-				```
 				""";
 		
 		String html = """
@@ -103,7 +95,6 @@ public class Blockquotes {
 	@Test
 	public void multipleNestedBlockquotes() throws IOException {
 		String markdown = """
-				```
 				> outside
 				>> nested
 				> out
@@ -111,7 +102,6 @@ public class Blockquotes {
 				>>> nested again
 				> out
 				>>> double nested
-				```
 				""";
 		
 		String html = """
