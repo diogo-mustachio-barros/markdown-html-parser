@@ -111,13 +111,13 @@ public class Parser {
 	
 	
 	private static void parseParagraph(Reader in, Writer out, String firstLine) throws IOException {
-		out.write("<p>");
+		out.write("<p>\n" + firstLine + "\n");
 		
 		String line;
 		while ((line = StringUtil.readLine(in)) != null 
 				&& !line.equals(""))
 			out.write(line + "\n");
 		
-		out.write("</p>");
+		out.write("</p>\n");
 	}
 }
