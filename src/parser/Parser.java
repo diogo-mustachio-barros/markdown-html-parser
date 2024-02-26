@@ -32,6 +32,9 @@ public class Parser {
 					parseCodeBlock(in, out, line);
 				else if (isBlockquote(line))
 					parseBlockquote(in, out, line);
+				else if (!line.equals(""))
+					parseParagraph(in, out, line);
+					
 			}
 			else
 			{
@@ -87,7 +90,7 @@ public class Parser {
 		String line = firstLine;
 		
 		while ((line = StringUtil.readLine(in)) != null 
-				&& !line.equals(CODE_BLOCK_DELIMITER))
+				&& line.startsWith(BLOCKQUOTE_CHARACTER + ""))
 		{
 			level = StringUtil.countHeadingChars(firstLine, BLOCKQUOTE_CHARACTER);
 			
@@ -95,7 +98,7 @@ public class Parser {
 				for (int i = 0; i + prevLevel < level; i++)
 					out.write("<blockquote>\n");
 			
-			out.write(firstLine.substring(level).trim() + "\n");
+			out.write(line.substring(level).trim() + "\n");
 			
 			if (level < prevLevel)
 				for (int i = 0; i + level < prevLevel; i++)
@@ -105,4 +108,16 @@ public class Parser {
 		}
 	}
 	
+	
+	
+	private static void parseParagraph(Reader in, Writer out, String firstLine) throws IOException {
+		out.write("<p>");
+		
+		String line;
+		while ((line = StringUtil.readLine(in)) != null 
+				&& !line.equals(""))
+			out.write(line + "\n");
+		
+		out.write("</p>");
+	}
 }
