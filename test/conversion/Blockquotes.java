@@ -118,8 +118,8 @@ public class Blockquotes {
 				</blockquote>
 				</blockquote>
 				out
-				</blockquote>
-				</blockquote>
+				<blockquote>
+				<blockquote>
 				double nested
 				</blockquote>
 				</blockquote>
