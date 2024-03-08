@@ -19,8 +19,8 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		String filepathIn  = "input/example1.md";
-		String filepathOut = "output";
+		String filepathIn  = args[0];
+		String filepathOut = args[1];
 		
 		File fileIn = new File(filepathIn);
 		File fileOut = new File(filepathOut);
@@ -47,7 +47,7 @@ public class Main {
 		// Try and open a writer
 		Writer w = null;
 		try {
-			w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileIn), "ASCII"));
+			w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileOut), "ASCII"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,6 +62,21 @@ public class Main {
 		// Generate html
 		try {
 			Parser.toHtml(r, w);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Close input and output
+		try {
+			r.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			w.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
