@@ -42,6 +42,8 @@ public class Parser {
 				sb.append((char) ascii);
 			}
 		}
+		
+		out.flush();
 	}
 
 	private static boolean isHeading(String line) {
